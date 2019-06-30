@@ -1,7 +1,7 @@
 # packages
+  
+    qt5-default
+    x-window-system
+    qtdeclarative5-dev
 
-libqt5core5a
-
-x-window-system
-
-
+    libqt5serialport5-dev
