@@ -1,36 +1,28 @@
 # in MainActivity.java
-
-startService(new Intent(MainActivity.this, FloatWindowService.class));
-
+    startService(new Intent(MainActivity.this, FloatWindowService.class));
 # in FloatWindowService.java
-
-package com.light.dict;
-import android.app.Service;
-
+    package com.light.dict;
+    import android.app.Service;
 # in FloatWindowService class
-public class FloatWindowService extends Service {
-    @Override
-    public void onCreate() {
-        super.onCreate();
-
+    public class FloatWindowService extends Service {
+        @Override
+        public void onCreate() {
+            super.onCreate();
+        }
+        @Nullable
+        @Override
+        public IBinder onBind(Intent intent) {
+            return null;
+        }
     }
+# in AndroidManifest.xml(included in '<manifest')
+    add permission
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
 
-    @Nullable
-    @Override
-    public IBinder onBind(Intent intent) {
-        return null;
-    }
-}
-
-# add permission in AndroidManifest.xml(included in '<manifest')
-<uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
-
-# and add service in AndroidManifest.xml(included in '<application')
-<service android:name=".FloatWindowService"
-            tools:ignore="WrongManifestParent">
-</service>
-
-#### full code in onCreate(windowmanager)
+# in AndroidManifest.xml(included in '<application')
+    add service
+    <service android:name=".FloatWindowService" tools:ignore="WrongManifestParent"></service>
+# full code in onCreate(windowmanager)
     final WindowManager windowManager;
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         linearLayout = new LinearLayout(this);
@@ -63,3 +55,58 @@ public class FloatWindowService extends Service {
         windowManager.addView(linearLayout, params);
 
 # set flowwindow moveable 
+    channellist.setOnTouchListener(new View.OnTouchListener() {
+            WindowManager.LayoutParams updatedParams = params;
+            int x = 0, y = 0;
+            float touchX, touchY;
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                switch (motionEvent.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        touchX = motionEvent.getRawX();
+                        touchY = motionEvent.getRawY();
+                        if(touchX < namewidth) {
+                            final int ich = (int)motionEvent.getY() / channelfullscale;
+                            int postview = (int)motionEvent.getY() % channelfullscale;
+                             if(postview < channelfullscale/3){  // peak ++
+                                scalefactor[ich] = scalefactor[ich] / 2;
+                            }else if(postview > channelfullscale/3*2) {   // valley --
+                                scalefactor[ich] = scalefactor[ich] * 2;
+                            }
+                            channelpeak[ich] = (float)channelhalfscale / scalefactor[ich];
+
+                            peakView[ich].post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    peakView[ich].setText(String.format("%.2fuV",channelpeak[ich]));
+                                }
+                            });
+                            valleyView[ich].post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    valleyView[ich].setText(String.format("-%.2fuV",channelpeak[ich]));
+                                }
+                            });
+
+
+                        }else{
+                            x = updatedParams.x;
+                            y = updatedParams.y;
+                        }
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        if(touchX > namewidth) {
+                            float xmoved = motionEvent.getRawX() - touchX;
+                            float ymoved = motionEvent.getRawY() - touchY;
+                            updatedParams.x = (int) (x + xmoved);
+                            updatedParams.y = (int) (y + ymoved);
+                            windowManager.updateViewLayout(channellist, updatedParams);
+                        }
+                        break;
+
+                    default:
+                        break;
+                }
+                return false;
+            }
+        });
