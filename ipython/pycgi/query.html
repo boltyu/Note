@@ -1,0 +1,47 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title> Greeting Page </title>
+</head>
+
+<body>
+    <h1>Hello !</h1>
+<form action="t.html" method="post" id="user_form">
+    幼儿姓名<input type="text" name="yname" size=12/><br/>
+    今日体温<input type="text" name="ytemp" size=12/><br/>
+    幼儿健康状况<select name="ymyheal">
+        <option value="健康" selected="selected">健康</option>
+        <option value="异常">异常</option>
+        </select><br/>
+    家人健康状况<select name="ymyheal">
+        <option value="健康" selected="selected">健康</option>
+        <option value="异常">异常</option>
+        </select><br/>
+    目前所在地<select name="ypos">
+        <option value="北京" selected="selected">北京</option>
+        <option value="福建">福建</option>
+        <option value="湖北">湖北</option>
+        <option value="哈尔滨">哈尔滨</option>
+        <option value="其它">其它</option>
+        </select><br/>
+    返京时间<select name="ytimem">
+            <option value="2月" selected="selected">2月</option>
+            <option value="3月">3月</option>
+            <option value="4月">4月</option>
+        </select>
+        <input type="text" name="ytimed" min=1 max=31 size=3/>日<br/>
+    返京交通工具<select name="ytrans">
+        <option value="飞机" selected="selected">飞机</option>
+        <option value="火车">火车</option>
+        <option value="汽车">汽车</option>
+        <option value="轮船">轮船</option>
+        <option value="其它">其它</option>
+        </select><br/>
+    有无接触湖北人员或是接触患有新冠状病毒肺炎的人员<select name="yaccess">
+        <option value="否" selected="selected">否</option>
+        <option value="是">是</option>
+        </select><br/>
+    <input type="submit" />
+</form>
+</body>
+</html>
