@@ -40,7 +40,7 @@ note https://docs.python.org/3/library/re.html
     如果要匹配'['or']'，要么其在集合的首个字符，要么加转译字符
     新Unicode技术标准中将允许集合嵌套和操作。为了能适应这种新特性将会对语法作出的改变，将对以'['为首字符的集合或者'--' '&&' '~~' '||'的使用作出警告，避免这些警告请使用转译字符
     另外FutureWarning的发出表示当前使用方法将会和未来新特性冲突
-## ｜
+##	/
     A和B是RE的判断式，A|B将匹配A或者B。多个RE判断式可以用'|'分割。这样的用法在组里一样有效。在搜索目标字符时，表达式从'|'左侧向右侧顺序匹配，左侧若匹配成功右侧将不会再测试，称它为非贪婪型也算。通过转译或者将它放在集合中来匹配它的普通字符,'\','[|]
 ## (...)[https://docs.python.org/zh-cn/3/library/re.html#index-14]
     匹配括号中的表达式，指定组的开始与结尾???组的内容可以在匹配后再确定，????。如要匹配'('or')'使用转译或者包含于集合中
@@ -133,15 +133,35 @@ note https://docs.python.org/3/library/re.html
     近几个传入compile()的RE式和模块级匹配函数的已编译版本都会被缓存起来，所以使用RE式不多的程序无需担心编译的问题
     pattern可由flags指定一些特性。
 ## re.A
+
 ## re.ASCII
     使得\w, \W, \b, \B, \d, \D, \s 和 \S 仅做ASCII匹配。当然如果本来就是ASCII的会忽略此标志。相关内联标志(?a)
     要注意反向兼容的问题，re.U标志仍存在，只是这个在python3中有些多余，因为默认就是Unicode
 ## re.DEBUG
     显示编译表达式的调试信息。没有相关内联标志
 ## re.I
+
 ## re.IGNORECASE
     匹配时忽略大小写。那么[A-Z]也会匹配到[a-z]的内容。Unicode匹配也如此(such as Ü matching ü) 。????。等同于内联标志(?i)
     一些特定情况参考头部文档
 ## re.L
+
 ## re.LOCALE
-????
+
+
+
+# EXAMPLE
+
+## 查找两个单词
+	如果要匹配两个words之中的任意一个
+	(?:one|two|three)
+	https://www.oreilly.com/library/view/regular-expressions-cookbook/9781449327453/ch05s02.html
+	
+	:%s/a/b/g 	将文中 所有行 的 a 替换为 b
+	:%s/a/b/gc 	将文中 所有行 的 a 替换为 b，每项都需要确认
+	:123,234s/a/b/g  将文中 123-234行 的 a 替换为 b
+	
+	使用re表达式筛选目标，vim中替换及查找默认使用re，其它编辑器需要开启re
+	:%s/(?<=\()handle/hInst/g	找到所有(handle但只将handle替换为hInst，结果为(hInst，其中\起转义(的作用
+	:%s/(?<=[\(, ])handle/hInst/g	其中[]囊括了handle前一个字符的所有可能性，找到所有"(handle"和",handle"和" handle"
+	:%s/(?<=(?:enc|dec))handle/Inst/g	其中(?: )囊括了handle前一个字符串的所有可能性，将找到所有enchandle和dechandle
