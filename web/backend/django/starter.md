@@ -132,10 +132,10 @@
     变量使用{{}}来包含，如:
         {{article.pub_date|date:"F j, Y"}}
     '|'是Unix风格的管道pipe，可以起过滤作用，上例便是对时间进行了格式化。管道数量可以累加。
-    {%extend "base.html"%}是模版继承，它表示首先要加载模版"base.html",在那里面已经定义了一些block，如：
+    '''{%extend "base.html"%}是模版继承，它表示首先要加载模版"base.html",在那里面已经定义了一些block，如：
         {%block title%} {%endblock}
     我们只需在扩展html中完善实现它的具体内容就行了：
-        {%extend "base.html"%}
+        '''{%extend "base.html"%}
         {%bock title%} HELLO {%endblock%}
     这种方式非常灵活，使得你可以任意更改站点版本，只需将子模版（使用extend的html）复用即可。Django的创建者已经使用这种技术来创建各个显著不同的手机版站点，只需创建一个新的base模版就好了。
 ## 渲染模版的两种方式
