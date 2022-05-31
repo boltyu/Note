@@ -133,16 +133,16 @@
         {{article.pub_date|date:"F j, Y"}}
     '|'是Unix风格的管道pipe，可以起过滤作用，上例便是对时间进行了格式化。管道数量可以累加。
 ```
-        {%extend "base.html"%}
+        {\%extend "base.html"%}
 ```
         是模版继承，它表示首先要加载模版"base.html",在那里面已经定义了一些block，如：
 ``` 
-        {%block title%} {%endblock}
+        {\%block title%} {\%endblock}
 ```
     我们只需在扩展html中完善实现它的具体内容就行了：
 ```
-        {%extend "base.html"%}
-        {%bock title%} HELLO {%endblock%}
+        {\%extend "base.html"%}
+        {\%bock title%} HELLO {\%endblock%}
 ```
     这种方式非常灵活，使得你可以任意更改站点版本，只需将子模版（使用extend的html）复用即可。Django的创建者已经使用这种技术来创建各个显著不同的手机版站点，只需创建一个新的base模版就好了。
 ## 渲染模版的两种方式
@@ -170,12 +170,12 @@
         href = "/polls/{{question_id}}"
     硬编码同样有耦合的问题，在有很多模版的项目中更改url会很困难。然而这也可以通过以下方式缓解：
 ```
-        {% url 'detail' question_id %}
+        {\% url 'detail' question_id %}
         path('specifics/<int:question_id>',view.detail,name='detail')
 ```
-    使用模版标签```{%url%}```来解决对特定url路径依赖的问题，它会自动在urls模块中查找匹配项。模版标签中'detail'将解释为路径'specifics/<int:question_id>'，question_id补充其内容
+    使用模版标签```{\%url%}```来解决对特定url路径依赖的问题，它会自动在urls模块中查找匹配项。模版标签中'detail'将解释为路径'specifics/<int:question_id>'，question_id补充其内容
 ## 命名空间URL名称
-    这个教程仅仅是个app，而在实际Django工程里，会有五个、十个或者更多。Django该如何区分它们的URL名称，比如polls app有一个detail视图，然后同一工程里的另一个blog app也有一个detail视图。当你用```{%url%}```时django该如何判断是哪个。
+    这个教程仅仅是个app，而在实际Django工程里，会有五个、十个或者更多。Django该如何区分它们的URL名称，比如polls app有一个detail视图，然后同一工程里的另一个blog app也有一个detail视图。当你用```{\%url%}```时django该如何判断是哪个。
     答案就是在URLconf里使用命名空间，在polls/urls.py文件中，在开头添加app_name来设置app的命名空间
         from django.urls import path
         from . import views
@@ -185,7 +185,7 @@
             ....}
     然后在对你的模版中的url标签做一些改进：
 ```
-         <li><a href="{% url 'polls:detail' question.id %}">{{ question.question_text }}</a></li>
+         <li><a href="{\% url 'polls:detail' question.id %}">{{ question.question_text }}</a></li>
 ```
 
 ## 写一个简单的表单
